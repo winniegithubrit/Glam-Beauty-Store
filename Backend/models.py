@@ -42,8 +42,9 @@ class Product(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     price = db.Column(db.Float, nullable=False)
+    image = db.Column(db.String(255))
+    
     orders = db.relationship('Order', secondary='order_product', backref='ordered_products', lazy=True, overlaps="ordered_products,orders")
-
     reviews = db.relationship('Review', backref='product', lazy=True)
     
     def to_dict(self):
@@ -51,7 +52,8 @@ class Product(db.Model):
             'id': self.id,
             'name': self.name,
             'description': self.description,
-            'price': self.price
+            'price': self.price,
+            'image': self.image 
             
         }
 
@@ -70,11 +72,6 @@ class Order(db.Model):
             'total_price': self.total_price
             
         }
-
-
-
-
-
 
 
 # Review Model
