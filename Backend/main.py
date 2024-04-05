@@ -83,17 +83,95 @@ def replace_product(product_id):
 
     return jsonify(product.to_dict()), 200
 
-# DELETE route to delete a product
+
+# DELETE a product
 @app.route('/products/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
     product = Product.query.get(product_id)
     if not product:
-        return jsonify({'error': 'Product not found'}), 404
+        return jsonify({"message": "Product not found"}), 404
+
+    # Delete associated reviews
+    reviews = Review.query.filter_by(product_id=product_id).all()
+    for review in reviews:
+        db.session.delete(review)
 
     db.session.delete(product)
     db.session.commit()
+    return jsonify({"message": "Product and associated reviews deleted successfully"})
 
-    return jsonify({'message': 'Product deleted successfully'}), 200
+# REVIEWS
+# GET all reviews
+@app.route('/reviews', methods=['GET'])
+def get_all_reviews():
+    reviews = Review.query.all()
+    review_list = [review.to_dict() for review in reviews]
+    return jsonify(review_list)
+
+# GET a review by ID
+@app.route('/reviews/<int:review_id>', methods=['GET'])
+def get_review_by_id(review_id):
+    review = Review.query.get(review_id)
+    if not review:
+        return jsonify({"message": "Review not found"}), 404
+
+    return jsonify(review.to_dict())
+
+
+# POST a new review
+@app.route('/reviews', methods=['POST'])
+def create_review():
+    data = request.get_json()
+    new_review = Review(user_id=data.get('user_id'),
+                        product_id=data.get('product_id'),
+                        rating=data.get('rating'),
+                        comment=data.get('comment'))
+    db.session.add(new_review)
+    db.session.commit()
+    return jsonify({"message": "Review created successfully"})
+
+# PUT to update a review
+@app.route('/reviews/<int:review_id>', methods=['PUT'])
+def update_review(review_id):
+    review = Review.query.get(review_id)
+    if not review:
+        return jsonify({"message": "Review not found"}), 404
+    data = request.get_json()
+    review.user_id = data.get('user_id', review.user_id)
+    review.product_id = data.get('product_id', review.product_id)
+    review.rating = data.get('rating', review.rating)
+    review.comment = data.get('comment', review.comment)
+    db.session.commit()
+    return jsonify({"message": "Review updated successfully"})
+
+# PATCH to partially update a review
+@app.route('/reviews/<int:review_id>', methods=['PATCH'])
+def partially_update_review(review_id):
+    review = Review.query.get(review_id)
+    if not review:
+        return jsonify({"message": "Review not found"}), 404
+    data = request.get_json()
+    if 'user_id' in data:
+        review.user_id = data['user_id']
+    if 'product_id' in data:
+        review.product_id = data['product_id']
+    if 'rating' in data:
+        review.rating = data['rating']
+    if 'comment' in data:
+        review.comment = data['comment']
+    db.session.commit()
+    return jsonify({"message": "Review partially updated successfully"})
+
+# DELETE a review
+@app.route('/reviews/<int:review_id>', methods=['DELETE'])
+def delete_review(review_id):
+    review = Review.query.get(review_id)
+    if not review:
+        return jsonify({"message": "Review not found"}), 404
+    db.session.delete(review)
+    db.session.commit()
+    return jsonify({"message": "Review deleted successfully"})
+
 
 
 
