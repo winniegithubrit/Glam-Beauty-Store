@@ -172,6 +172,173 @@ def delete_review(review_id):
     db.session.commit()
     return jsonify({"message": "Review deleted successfully"})
 
+# ORDERS
+
+# CREATE an order
+@app.route('/orders', methods=['POST'])
+def create_order():
+    data = request.json
+    user_id = data.get('user_id')
+    total_price = data.get('total_price')
+    product_ids = data.get('product_ids') 
+
+    if not user_id or not total_price or not product_ids:
+        return jsonify({"message": "Missing required fields"}), 400
+
+    # Create the order
+    order = Order(user_id=user_id, total_price=total_price)
+    for product_id in product_ids:
+        product = Product.query.get(product_id)
+        if not product:
+            return jsonify({"message": f"Product with ID {product_id} not found"}), 404
+        order.products.append(product)
+
+    db.session.add(order)
+    db.session.commit()
+
+    return jsonify({"message": "Order created successfully", "order_id": order.id}), 201
+
+
+# READ all orders
+@app.route('/orders', methods=['GET'])
+def get_all_orders():
+    orders = Order.query.all()
+    order_list = [order.to_dict() for order in orders]
+    return jsonify(order_list)
+
+
+# READ an order by ID
+@app.route('/orders/<int:order_id>', methods=['GET'])
+def get_order_by_id(order_id):
+    order = Order.query.get(order_id)
+    if not order:
+        return jsonify({"message": "Order not found"}), 404
+
+    return jsonify(order.to_dict())
+
+
+# UPDATE an order by ID
+@app.route('/orders/<int:order_id>', methods=['PUT', 'PATCH'])
+def update_order(order_id):
+    order = Order.query.get(order_id)
+    if not order:
+        return jsonify({"message": "Order not found"}), 404
+
+    data = request.json
+    user_id = data.get('user_id')
+    total_price = data.get('total_price')
+    product_ids = data.get('product_ids')
+
+    if user_id:
+        order.user_id = user_id
+    if total_price:
+        order.total_price = total_price
+    if product_ids:
+        order.products = []
+        for product_id in product_ids:
+            product = Product.query.get(product_id)
+            if not product:
+                return jsonify({"message": f"Product with ID {product_id} not found"}), 404
+            order.products.append(product)
+
+    db.session.commit()
+
+    return jsonify({"message": "Order updated successfully"})
+
+
+# DELETE an order by ID
+@app.route('/orders/<int:order_id>', methods=['DELETE'])
+def delete_order(order_id):
+    order = Order.query.get(order_id)
+    if not order:
+        return jsonify({"message": "Order not found"}), 404
+
+    db.session.delete(order)
+    db.session.commit()
+
+    return jsonify({"message": "Order deleted successfully"})
+
+# CREATE a user
+@app.route('/users', methods=['POST'])
+def create_user():
+    data = request.json
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if not username or not email or not password:
+        return jsonify({"message": "Missing required fields"}), 400
+
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        return jsonify({"message": "Username already exists"}), 400
+
+    existing_email = User.query.filter_by(email=email).first()
+    if existing_email:
+        return jsonify({"message": "Email already exists"}), 400
+
+    user = User(username=username, email=email, password=password)
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({"message": "User created successfully", "user_id": user.id}), 201
+
+
+# READ all users
+@app.route('/users', methods=['GET'])
+def get_all_users():
+    users = User.query.all()
+    user_list = [user.to_dict() for user in users]
+    return jsonify(user_list)
+
+
+# READ a user by ID
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user_by_id(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    return jsonify(user.to_dict())
+
+
+# UPDATE a user by ID
+@app.route('/users/<int:user_id>', methods=['PUT', 'PATCH'])
+def update_user(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    data = request.json
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+
+    if username:
+        user.username = username
+    if email:
+        user.email = email
+    if password:
+        user.password = password
+
+    db.session.commit()
+
+    return jsonify({"message": "User updated successfully"})
+
+
+# DELETE a user by ID
+@app.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({"message": "User deleted successfully"})
+
+
 
 
 
