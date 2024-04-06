@@ -13,10 +13,10 @@ function App() {
           <div className="inner-nav">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/products" element={<Products />} />
               <Route path="/about" element={<About />} />
-              {/* <Route element={<Home />} />  */}
             </Routes>
           </div>
         </BrowserRouter>
