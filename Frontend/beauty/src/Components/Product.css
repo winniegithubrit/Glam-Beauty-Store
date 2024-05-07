@@ -1,31 +1,73 @@
+
+ * {
+   font-family: "DM Sans", sans-serif;
+ }
 .product-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 10px;
- 
+  gap: 20px;
+  background-color: #f6e7f7;
+  padding: 20px;
+  
 }
-
 
 .card {
   width: 250px;
-  height: 300px;
-  border-radius: 10px;
+  height: auto;
+  border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #dabadb;
+  /* Light pastel purple */
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-5px);
 }
 
 .card-img-top {
   width: 100%;
-  height: auto;
+  height: 200px;
+  /* Adjust as needed */
+  object-fit: cover;
 }
 
 .card-body {
   padding: 20px;
 }
 
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #5e366e;
+  /* Dark purple */
+  margin-bottom: 10px;
+}
 
-.card {
-  background-color: #787474;
-  
+.card-description {
+  font-size: 16px;
+  color: #8a5298;
+  /* Light purple */
+}
+
+.card-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #5e366e;
+  /* Dark purple */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.card-button:hover {
+  background-color: #8a5298;
+  /* Light purple */
 }

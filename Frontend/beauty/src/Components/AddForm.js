@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import "./AddForm.css"
 
 function AddForm() {
   const [formData, setFormData] = useState({
@@ -44,7 +44,7 @@ function AddForm() {
   }
 
   return (
-    <div>
+    <div className="container">
       <h2>Add Product</h2>
       <form onSubmit={handleSubmit}>
         <label>Name:</label>

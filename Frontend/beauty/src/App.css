@@ -1,4 +1,6 @@
- 
+ *{
+  font-family: "DM Sans", sans-serif;
+ }
   .navbar {
     background-color: #333;
     padding: 10px 0;

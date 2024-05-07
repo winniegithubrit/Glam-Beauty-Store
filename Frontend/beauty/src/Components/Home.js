@@ -19,7 +19,7 @@ function Home() {
           alt="Make Up Image"
         />
         <div className="image-text">
-          <h1>GLAM BEAUTY STORE</h1>
+          <h2>GLAM BEAUTY STORE</h2>
           <h2>IS NOW OPEN !!</h2>
           <h3>Discover your beauty essentials with us </h3>
           <h3>
