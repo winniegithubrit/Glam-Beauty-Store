@@ -93,6 +93,7 @@ def seed_data():
             products.append(product)
         db.session.add_all(products)
         db.session.commit()
+        Product.query.delete()
 
 if __name__ == '__main__':
     seed_data()

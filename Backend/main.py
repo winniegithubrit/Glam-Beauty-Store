@@ -338,7 +338,13 @@ def delete_user(user_id):
 
     return jsonify({"message": "User deleted successfully"})
 
-
+# Endpoint to fetch all items in the cart
+@app.route('/cart_items', methods=['GET'])
+def get_cart_items():
+    if cart_items:
+        return jsonify(cart_items)
+    else:
+        return jsonify({'message': 'Cart is empty'})
 
 
 
