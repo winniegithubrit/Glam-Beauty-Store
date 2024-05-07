@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./ProductForm.css";
+
 import { useParams, Link } from "react-router-dom";
 
 
@@ -49,7 +50,7 @@ function ProductForm() {
   }
 
   return (
-    <div>
+    <div className="form-cont">
       <h2>Update Product</h2>
       <form onSubmit={handleSubmit}>
         <label>Name:</label>

@@ -7,7 +7,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 20px;
-  background-color: #f6e7f7;
+  background-color: rgb(239, 217, 221);
   padding: 20px;
   
 }
@@ -18,7 +18,7 @@
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background-color: #dabadb;
+  background-color: rgb(164, 120, 127);
   /* Light pastel purple */
   transition: transform 0.3s ease-in-out;
 }
