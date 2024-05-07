@@ -1,0 +1,63 @@
+.big-image {
+  width: 90%;
+  height: 670px;
+  overflow: hidden;
+  margin: auto;
+}
+
+.big-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-top: -90px;
+}
+
+.image-text {
+  position: absolute;
+  top: 140px;
+  left: 90px;
+  color: white;
+}
+
+.image-text h1 {
+  font-size: 75px;
+  letter-spacing: 6px;
+}
+
+.image-text h2 {
+  font-size: 55px;
+  color: red;
+  letter-spacing: 6px;
+  margin-left: 40px;
+}
+
+.image-text h2:hover {
+  color: aqua;
+}
+
+.image-text h3 {
+  margin: 5px 0;
+  font-size: 26px;
+  color: white;
+  font-weight: 600;
+  line-height: 28px;
+  margin-left: 40px;
+}
+
+.btn input[type="button"] {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 15px 20px;
+  font-size: 25px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  font-weight: bold;
+  margin-left: 40px;
+  margin-top: 29px;
+}
+
+.btn input[type="button"]:hover {
+  background-color: #155026;
+}
