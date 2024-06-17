@@ -74,14 +74,17 @@ function Products({ cartItems, setCartItems }) {
                   <div className="card-body">
                     <h5 className="card-title">{product.name}</h5>
                     <p className="card-text">Price: ${product.price}</p>
-                    <button onClick={() => addToCart(product)}>
+                    <button onClick={() => addToCart(product)} className="btns">
                       Add to Cart
                     </button>
                     <div>
                       <Link to={`/products/${product.id}`}>
-                        <button>Update</button>
+                        <button className="btns">Update</button>
                       </Link>
-                      <button onClick={() => handleDelete(product.id)}>
+                      <button
+                        onClick={() => handleDelete(product.id)}
+                        className="btns"
+                      >
                         Delete
                       </button>
                     </div>

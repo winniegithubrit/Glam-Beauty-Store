@@ -66,3 +66,25 @@
   align-items: center;
 }
 
+.btns-container {
+  display: flex;
+  gap: 10px;
+  
+
+}
+
+.btns {
+  background-color: #bd9ea8;
+  border-radius: 10px;
+  height: 30px;
+  font-weight: bold;
+  width: 100px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btns:hover {
+  background-color: #a18691;
+ 
+}
