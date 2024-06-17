@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Products({ cartItems, setCartItems }) {
   const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,7 +48,7 @@ function Products({ cartItems, setCartItems }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("Item added to cart:", data);
-        setCartItems([...cartItems, data]); 
+        setCartItems([...cartItems, data]);
         navigate("/cart");
       })
       .catch((error) => {
@@ -55,12 +56,24 @@ function Products({ cartItems, setCartItems }) {
       });
   };
 
+  // Filter products based on search query
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="main">
       <div className="product-data">
         <h1>Our Products</h1>
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-input"
+        />
         <ul className="product-list">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <li key={product.id}>
               <div className="product-container">
                 <div className="card">
@@ -74,16 +87,19 @@ function Products({ cartItems, setCartItems }) {
                   <div className="card-body">
                     <h5 className="card-title">{product.name}</h5>
                     <p className="card-text">Price: ${product.price}</p>
-                    <button onClick={() => addToCart(product)} className="btns">
-                      Add To Cart
-                    </button>
-                    <div>
+                    <div className="card-actions">
+                      <button
+                        onClick={() => addToCart(product)}
+                        className="btns btn-add-to-cart"
+                      >
+                        Add To Cart
+                      </button>
                       <Link to={`/update-product/${product.id}`}>
-                        <button className="btns">Update</button>
+                        <button className="btns btn-small">Update</button>
                       </Link>
                       <button
                         onClick={() => handleDelete(product.id)}
-                        className="btns"
+                        className="btns btn-small"
                       >
                         Delete
                       </button>

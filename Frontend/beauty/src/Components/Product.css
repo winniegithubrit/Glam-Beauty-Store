@@ -1,7 +1,8 @@
 .main {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 20px auto;
   padding: 20px;
+  background-color: #f9f9f9;
 }
 
 .product-data {
@@ -12,16 +13,21 @@
   list-style-type: none;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
 }
 
 .product-container {
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  /* White background */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .card {
@@ -32,22 +38,22 @@
 
 .card-img-top {
   width: 100%;
-  height: 200px;
+  height: 300px;
   object-fit: cover;
-  border-bottom: 1px solid #f06292;
+  border-bottom: 2px solid #f06292;
   /* Pinkish color for border bottom */
 }
 
 .card-body {
   padding: 20px;
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex-grow: 1;
 }
 
 .card-title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
   color: #f06292;
   /* Pinkish color */
@@ -55,7 +61,7 @@
 }
 
 .card-text {
-  font-size: 16px;
+  font-size: 18px;
   color: #555;
   margin-bottom: 10px;
 }
@@ -64,12 +70,50 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+  /* Adjust gap if necessary */
 }
 
-.btns{
+.btns {
   background-color: #bd9ea8;
+  border: none;
   border-radius: 10px;
-  height: 30px;
+  height: 40px;
   font-weight: bold;
-  width: 120px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  /* Ensure vertical alignment */
+  justify-content: center;
+  /* Center text horizontally */
+}
+
+.btns:hover {
+  background-color: #a18691;
+  transform: scale(1.05);
+}
+
+.btn-add-to-cart {
+  width: 150px;
+}
+
+.btn-small {
+  width: 80px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #f06292;
 }
