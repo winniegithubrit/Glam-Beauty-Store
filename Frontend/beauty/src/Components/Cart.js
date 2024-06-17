@@ -1,3 +1,4 @@
+// Cart.js
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Cart.css"; // Import the CSS file
@@ -89,9 +90,10 @@ function Cart({ cartItems, setCartItems }) {
       });
   };
 
-  const handleCheckout = () => {
-    navigate("/"); 
-  };
+ const handleCheckout = () => {
+   const totalAmount = cartItems.reduce((sum, item) => sum + item.total, 0);
+   navigate("/payment", { state: { totalAmount } });
+ };
 
   return (
     <div className="cart-container">
@@ -135,7 +137,7 @@ function Cart({ cartItems, setCartItems }) {
         )}
       </div>
       <button onClick={handleCheckout} className="checkout-button">
-        Checkout
+        Proceed to Payment
       </button>
     </div>
   );

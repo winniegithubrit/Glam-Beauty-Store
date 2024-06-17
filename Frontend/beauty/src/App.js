@@ -10,6 +10,7 @@ import Cart from "./Components/Cart";
 import ProductDetails from "./Components/ProductDetails";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
+import Payment from "./Components/Payment";
 import ProductForm from "./Components/ProductForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
@@ -87,6 +88,7 @@ function App() {
               />
               <Route path="/products/:id" element={<ProductDetails />} />
               <Route path="/update-product/:id" element={<ProductForm />} />
+              <Route path="/payment" element={<Payment />} />
               <Route path="*" element={<Navigate to="/home" />} />
             </>
           )}
