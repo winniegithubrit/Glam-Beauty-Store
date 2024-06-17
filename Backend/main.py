@@ -1,14 +1,14 @@
 from flask import Flask, jsonify,request
 from flask_cors import CORS
 from flask_migrate import Migrate
-from models import  db, User, Product,Review,Order
+from models import  db, User, Product,Review,Order,Cart
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-migrate = Migrate(app, db)
 CORS(app)
+migrate = Migrate(app, db)
 db.init_app(app)
 
 @app.route('/')
@@ -325,6 +325,13 @@ def update_user(user_id):
 
     return jsonify({"message": "User updated successfully"})
 
+@app.route('/cart/<int:id>', methods=['GET'])
+def get_cart_item(id):
+    cart_item = Cart.query.get(id)
+    if cart_item:
+        return jsonify(cart_item.to_dict()), 200
+    else:
+        return jsonify({'error': 'Cart item not found'}), 404
 
 # DELETE a user by ID
 @app.route('/users/<int:user_id>', methods=['DELETE'])
@@ -338,14 +345,82 @@ def delete_user(user_id):
 
     return jsonify({"message": "User deleted successfully"})
 
-# Endpoint to fetch all items in the cart
-@app.route('/cart_items', methods=['GET'])
-def get_cart_items():
-    if cart_items:
-        return jsonify(cart_items)
-    else:
-        return jsonify({'message': 'Cart is empty'})
+# CARTS FUNCTIONALITY
+@app.route('/carts', methods=['GET'])
+def get_all_cart_items():
+    cart_items = Cart.query.all()
+    return jsonify([item.to_dict() for item in cart_items]), 200
 
+@app.route('/carts', methods=['POST'])
+def add_to_cart():
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({'error': 'No input data provided'}), 400
+    
+    name = data.get('name')
+    price = data.get('price')
+    description = data.get('description')
+    image = data.get('image')
+    quantity = data.get('quantity')
+    total = data.get('total')
+    user_id = data.get('user_id')
+    
+    if not all([name, price, description, image, quantity, total, user_id]):
+        return jsonify({'error': 'Missing data'}), 400
+
+    new_cart_item = Cart(
+        name=name,
+        price=price,
+        description=description,
+        image=image,
+        quantity=quantity,
+        total=total,
+        user_id=user_id
+    )
+    
+    db.session.add(new_cart_item)
+    db.session.commit()
+    
+    return jsonify(new_cart_item.to_dict()), 201
+
+@app.route('/carts/<int:cart_id>', methods=['DELETE'])
+def delete_cart(cart_id):
+    cart = Cart.query.get(cart_id)
+    if not cart:
+        return jsonify({"message": "Cart item not found"}), 404
+
+    db.session.delete(cart)
+    db.session.commit()
+
+    return jsonify({"message": "Cart item deleted successfully"}), 200
+
+@app.route('/carts/<int:item_id>/increase-quantity', methods=['PUT'])
+def increase_quantity(item_id):
+    item = Cart.query.get(item_id)
+    if not item:
+        return jsonify({"message": "Item not found"}), 404
+
+    item.quantity += 1
+    item.total = item.price * item.quantity
+    db.session.commit()
+
+    return jsonify({"quantity": item.quantity, "total": item.total}), 200
+
+
+@app.route('/carts/<int:item_id>/decrease-quantity', methods=['PUT'])
+def decrease_quantity(item_id):
+    item = Cart.query.get(item_id)
+    if not item:
+        return jsonify({"message": "Item not found"}), 404
+
+    if item.quantity > 1:
+        item.quantity -= 1
+        item.total = item.price * item.quantity
+        db.session.commit()
+        return jsonify({"quantity": item.quantity, "total": item.total}), 200
+    else:
+        return jsonify({"message": "Quantity cannot be less than 1"}), 400
 
 
   

@@ -91,3 +91,26 @@ class Review(db.Model):
             'rating': self.rating,
             'comment': self.comment
         }
+class Cart(db.Model):
+    __tablename__ = "cart"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    price = db.Column(db.Integer)
+    description = db.Column(db.String(255))
+    image = db.Column(db.String(255))
+    quantity = db.Column(db.Integer)
+    total = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))  
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'price': self.price,
+            'description': self.description,
+            'image': self.image,
+            'quantity': self.quantity,
+            'total': self.total,
+            'user_id': self.user_id
+        }

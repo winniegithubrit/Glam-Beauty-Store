@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Product.css";
 import { Link, useNavigate } from "react-router-dom";
 
-function Products() {
+function Products({ cartItems, setCartItems }) {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
@@ -12,15 +12,12 @@ function Products() {
       .then((products) => setProducts(products));
   }, []);
 
-  // Function to handle product deletion
   const handleDelete = (productId) => {
-    // Send a DELETE request to the server to delete the product
     fetch(`http://127.0.0.1:5000/products/${productId}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
       .then((data) => {
-        // Remove the deleted product from the products state
         setProducts(products.filter((product) => product.id !== productId));
         console.log("Product deleted:", data);
       })
@@ -29,16 +26,37 @@ function Products() {
       });
   };
 
-  // Function to handle adding a product to the cart
-  const addToCart = (productId) => {
-    // Implement logic to add the product to the cart
-    // For now, just navigate to the cart page
-    navigate("/cart");
+  const addToCart = (product) => {
+    const cartItem = {
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      image: product.image,
+      quantity: 1, // Default quantity
+      total: product.price, // Default total
+      user_id: 1, // Assuming user_id is 1 for demo purposes
+    };
+
+    fetch("http://127.0.0.1:5000/carts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cartItem),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Item added to cart:", data);
+        setCartItems([...cartItems, data]); 
+        navigate("/cart");
+      })
+      .catch((error) => {
+        console.error("Error adding product to cart:", error);
+      });
   };
 
   return (
     <div className="main">
-      {/* Product data */}
       <div className="product-data">
         <h1>Our Products</h1>
         <ul className="product-list">
@@ -46,16 +64,17 @@ function Products() {
             <li key={product.id}>
               <div className="product-container">
                 <div className="card">
-                  <img
-                    src={product.image_url}
-                    alt={product.name}
-                    className="card-img-top"
-                  />
+                  <Link to={`/products/${product.id}`}>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="card-img-top"
+                    />
+                  </Link>
                   <div className="card-body">
                     <h5 className="card-title">{product.name}</h5>
                     <p className="card-text">Price: ${product.price}</p>
-                    {/* Add to Cart button */}
-                    <button onClick={() => addToCart(product.id)}>
+                    <button onClick={() => addToCart(product)}>
                       Add to Cart
                     </button>
                     <div>
