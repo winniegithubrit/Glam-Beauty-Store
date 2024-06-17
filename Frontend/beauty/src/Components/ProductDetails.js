@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import "./ProductDetails.css"; // Import the updated CSS file
 
 function ProductDetails({ cartItems, setCartItems }) {
   const { id } = useParams();
@@ -49,13 +50,26 @@ function ProductDetails({ cartItems, setCartItems }) {
   }
 
   return (
-    <div className="product-details">
-      <h2>{product.name}</h2>
-      <img src={product.image} alt={product.name} />
-      <p>Price: ${product.price}</p>
-      <p>{product.description}</p>
-      <button onClick={() => addToCart(product)}>Add to Cart</button>
-      <Link to="/products">Back to Products</Link>
+    <div className="product-details-container">
+      <div className="product-details-image">
+        <img src={product.image} alt={product.name} />
+      </div>
+      <div className="product-details-details">
+        <h2>{product.name}</h2>
+        <p className="product-details-price">Price: ${product.price}</p>
+        <p>{product.description}</p>
+        <div className="product-details-actions">
+          <button
+            className="product-details-button"
+            onClick={() => addToCart(product)}
+          >
+            Add to Cart
+          </button>
+          <Link className="product-details-back-link" to="/products">
+            Back to Products
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,59 @@
+.signup-form {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 40px;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  background-color: #f0f0f0;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+
+}
+
+.signup-form input,
+.signup-form button {
+  width: 100%;
+  padding: 18px;
+  margin-bottom: 25px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 18px;
+  box-sizing: border-box;
+  
+}
+
+.signup-form button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-form button:hover {
+  background-color: #45a049;
+}
+
+.signup-form input[type="text"],
+.signup-form input[type="email"],
+.signup-form input[type="password"] {
+  padding-left: 20px;
+
+}
+
+.signup-form input[type="text"]::placeholder,
+.signup-form input[type="email"]::placeholder,
+.signup-form input[type="password"]::placeholder {
+  color: #999;
+}
+
+.signup-form input:focus,
+.signup-form button:focus {
+  outline: none;
+}
+
+@media screen and (max-width: 600px) {
+  .signup-form {
+    width: 90%;
+    max-width: none;
+  }
+}

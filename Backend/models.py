@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import validates
 
 
+
 db = SQLAlchemy()
 
 # Define the association table for the many-to-many relationship

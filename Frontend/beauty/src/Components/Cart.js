@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-
 import { useNavigate } from "react-router-dom";
+import "./Cart.css"; // Import the CSS file
 
 function Cart({ cartItems, setCartItems }) {
   const navigate = useNavigate();
@@ -90,7 +90,7 @@ function Cart({ cartItems, setCartItems }) {
   };
 
   const handleCheckout = () => {
-    navigate("/"); // Navigate to the home page
+    navigate("/"); 
   };
 
   return (
@@ -101,19 +101,32 @@ function Cart({ cartItems, setCartItems }) {
           cartItems.map((item) => (
             <div key={item.id} className="cart-item">
               <img src={item.image} alt={item.name} />
-              <span>Name: {item.name}</span>
-              <br />
-              <span>Price: ${item.price}</span>
-              <br />
-              <span>Description: {item.description}</span>
-              <br />
-              <span>Quantity: {item.quantity}</span>
-              <br />
-              <span>Total: ${item.total}</span>
+              <div>
+                <p>
+                  <span>Name:</span> {item.name}
+                </p>
+                <p>
+                  <span>Price:</span> ${item.price}
+                </p>
+                <p>
+                  <span>Description:</span> {item.description}
+                </p>
+                <p className="quantity-label">
+                  <span>Quantity:</span> {item.quantity}
+                </p>
+                <p className="total-label">
+                  <span>Total:</span> ${item.total}
+                </p>
+              </div>
               <div className="cart-item-actions">
                 <button onClick={() => increaseQuantity(item.id)}>+</button>
                 <button onClick={() => decreaseQuantity(item.id)}>-</button>
-                <button onClick={() => deleteCartItem(item.id)}>Remove</button>
+                <button
+                  onClick={() => deleteCartItem(item.id)}
+                  className="remove-button"
+                >
+                  Remove
+                </button>
               </div>
             </div>
           ))
@@ -121,7 +134,9 @@ function Cart({ cartItems, setCartItems }) {
           <p>Your cart is empty.</p>
         )}
       </div>
-      <button onClick={handleCheckout}>Checkout</button>
+      <button onClick={handleCheckout} className="checkout-button">
+        Checkout
+      </button>
     </div>
   );
 }

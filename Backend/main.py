@@ -2,14 +2,24 @@ from flask import Flask, jsonify,request
 from flask_cors import CORS
 from flask_migrate import Migrate
 from models import  db, User, Product,Review,Order,Cart
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from config import JWT_SECRET_KEY, generate_jwt_secret_key 
+import datetime
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = JWT_SECRET_KEY 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JWT_SECRET_KEY'] = JWT_SECRET_KEY
+
 
 CORS(app)
 migrate = Migrate(app, db)
 db.init_app(app)
+jwt = JWTManager(app)
+bcrypt = Bcrypt(app)
+
 
 @app.route('/')
 def index():
@@ -422,7 +432,56 @@ def decrease_quantity(item_id):
     else:
         return jsonify({"message": "Quantity cannot be less than 1"}), 400
 
+# User Registration
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
 
+    if not username or not email or not password:
+        return jsonify({"message": "Missing required fields"}), 400
+
+    existing_user = User.query.filter_by(username=username).first()
+    if existing_user:
+        return jsonify({"message": "Username already exists"}), 400
+
+    existing_email = User.query.filter_by(email=email).first()
+    if existing_email:
+        return jsonify({"message": "Email already exists"}), 400
+
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    user = User(username=username, email=email, password=hashed_password)
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify({"message": "User created successfully"}), 201
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+
+    if not username or not password:
+        return jsonify({"message": "Missing required fields"}), 400
+
+    user = User.query.filter_by(username=username).first()
+    if user and bcrypt.check_password_hash(user.password, password):
+        access_token = create_access_token(identity=user.id, expires_delta=datetime.timedelta(hours=1))
+        return jsonify({"token": access_token, "username": user.username}), 200
+    else:
+        return jsonify({"message": "Invalid credentials"}), 401
+
+
+# Protected Route Example
+@app.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    return jsonify({"logged_in_as": user.username}), 200
   
 if __name__ == '__main__':
     app.run(port=5000)
