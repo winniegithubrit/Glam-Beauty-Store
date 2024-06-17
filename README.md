@@ -1,1 +1,1 @@
-# Glam-Beauty-FullStack
+# Glam-Beauty-FullStack# Glam-Beauty-Store
