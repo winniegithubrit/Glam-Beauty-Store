@@ -1,59 +1,81 @@
-.signup-form {
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 40px;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  background-color: #f0f0f0;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-
+/* Container for the authentication components */
+.glam-auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f6f5f7;
 }
 
-.signup-form input,
-.signup-form button {
+/* Box containing the form */
+.glam-form-box {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  padding: 50px;
+  max-width: 400px;
   width: 100%;
-  padding: 18px;
-  margin-bottom: 25px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  font-size: 18px;
-  box-sizing: border-box;
-  
+  text-align: center;
 }
 
-.signup-form button {
-  background-color: #4caf50;
-  color: white;
+/* Sign-up form */
+.glam-sign-up-box {
+  /* Custom styling for sign-up box */
+}
+
+.glam-signup-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.glam-signup-form h1 {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.glam-signup-form .glam-social-icons {
+  margin: 20px 0;
+}
+
+.glam-signup-form .glam-social-link {
+  border: 1px solid #dddddd;
+  border-radius: 50%;
+  display: inline-block;
+  height: 40px;
+  margin: 0 10px;
+  width: 40px;
+}
+
+.glam-signup-form .glam-social-link i {
+  font-size: 20px;
+  line-height: 40px;
+  color: #333333;
+}
+
+.glam-signup-form input {
+  background-color: #eee;
   border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
 }
 
-.signup-form button:hover {
-  background-color: #45a049;
+.glam-signup-form button {
+  border-radius: 20px;
+  border: 1px solid #ff4b2b;
+  background-color: #ff4b2b;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
 }
 
-.signup-form input[type="text"],
-.signup-form input[type="email"],
-.signup-form input[type="password"] {
-  padding-left: 20px;
-
+.glam-signup-form button:active {
+  transform: scale(0.95);
 }
 
-.signup-form input[type="text"]::placeholder,
-.signup-form input[type="email"]::placeholder,
-.signup-form input[type="password"]::placeholder {
-  color: #999;
-}
-
-.signup-form input:focus,
-.signup-form button:focus {
+.glam-signup-form button:focus {
   outline: none;
-}
-
-@media screen and (max-width: 600px) {
-  .signup-form {
-    width: 90%;
-    max-width: none;
-  }
 }
