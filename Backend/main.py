@@ -4,8 +4,10 @@ from flask_migrate import Migrate
 from models import  db, User, Product,Review,Order,Cart
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-from config import JWT_SECRET_KEY, generate_jwt_secret_key 
+from config import JWT_SECRET_KEY 
+import requests
 import datetime
+import base64
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = JWT_SECRET_KEY 
@@ -19,6 +21,70 @@ migrate = Migrate(app, db)
 db.init_app(app)
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
+
+# Replace with your actual M-Pesa credentials
+CONSUMER_KEY = 'zqEvxLG6lBnqA2cr7dDTHIhtzdUh0XBC6gja0AwhxFkcfnUB'
+CONSUMER_SECRET = 'qEufBcljvh5VwBGRAvwRL6C2B0cmn1a9XCasB6USaeNfR1Exz0AiSMO7cvABAwGr'
+
+
+#MPESA INTERGRATION
+
+@app.route('/mpesa/stk', methods=['POST'])
+def mpesa_stk_push():
+    data = request.json
+    phone_number = data.get('phone_number')
+    amount = data.get('amount')
+    product_name = data.get('product_name')
+
+    access_token = generate_access_token()
+
+    if access_token:
+        api_url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest'
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/json'
+        }
+        timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        password = generate_password(timestamp)
+
+        payload = {
+            'BusinessShortCode': SHORTCODE,
+            'Password': password,
+            'Timestamp': timestamp,
+            'TransactionType': 'CustomerPayBillOnline',
+            'Amount': amount,
+            'PartyA': phone_number,
+            'PartyB': SHORTCODE,
+            'PhoneNumber': phone_number,
+            'CallBackURL': 'http://callback.url',  # Replace with your callback URL
+            'AccountReference': 'your_account_reference',
+            'TransactionDesc': f'Payment for {product_name}'
+        }
+
+        response = requests.post(api_url, json=payload, headers=headers)
+
+        if response.status_code == 200:
+            return jsonify({'message': 'STK push initiated successfully', 'data': response.json()}), 200
+        else:
+            return jsonify({'error': 'Failed to initiate STK push', 'data': response.json()}), response.status_code
+
+    return jsonify({'error': 'Failed to generate M-Pesa access token'}), 500
+
+def generate_access_token():
+    url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate'
+    headers = {
+        'Authorization': 'Basic ' + base64.b64encode(f'{CONSUMER_KEY}:{CONSUMER_SECRET}'.encode()).decode(),
+        'Content-Type': 'application/json'
+    }
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        return response.json()['access_token']
+    else:
+        return None
+
+def generate_password(timestamp):
+    return base64.b64encode(f'{SHORTCODE}{PASSKEY}{timestamp}'.encode()).decode()
 
 
 @app.route('/')
